@@ -49,7 +49,6 @@ public:
 
         queue<pair<int,int>> q;
 
-        // Multi-source BFS
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
                 if(grid[i][j]){
@@ -79,20 +78,20 @@ public:
             }
         }
 
-        int lo=0;
-        int hi=2*n;
+        int low=0;
+        int high=2*n;
         int ans=0;
 
-        while(lo<=hi){
+        while(low<=high){
 
-            int mid=(lo+hi)/2;
+            int mid=(low+high)/2;
 
             if(possible(dist,mid)){
                 ans=mid;
-                lo=mid+1;
+                low=mid+1;
             }
             else
-                hi=mid-1;
+                high=mid-1;
         }
 
         return ans;
