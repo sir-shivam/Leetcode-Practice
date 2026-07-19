@@ -9,26 +9,29 @@
  * };
  */
 class Solution {
+
+    pair<ListNode*, ListNode*> help( ListNode * temp  ){
+        
+        if( temp && temp -> next == NULL ) return {temp , temp };
+
+
+        pair<ListNode* , ListNode*>  ret  = help(temp -> next );
+
+        temp -> next = NULL;
+        ret.second -> next = temp;
+
+        return {ret.first , temp};
+    }
 public:
     ListNode* reverseList(ListNode* head) {
+        // trying recursive way 
+
+        if( head == NULL ) return NULL;
         
-        ListNode* prev = NULL;
+        pair<ListNode * , ListNode* >  temp1 = help( head );
 
-        ListNode * temp = head;
-
-        while( temp ){
-            ListNode * front = temp -> next ;
-
-            temp -> next = prev ;
-
-            prev = temp;
-
-            temp = front;
-        }
-
-        head = prev ;
-
-        return head;
-
+        ListNode*  temp = temp1.first; 
+        
+        return temp;
     }
 };
