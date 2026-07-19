@@ -10,17 +10,23 @@
  */
 class Solution {
 
-    pair<ListNode*, ListNode*> help( ListNode * temp  ){
+    ListNode* help( ListNode * temp  , ListNode* prev ){
         
-        if( temp && temp -> next == NULL ) return {temp , temp };
+
+        ListNode* front = temp -> next ;
+        temp -> next = prev;
+
+        if(!front) {
+            return temp;
+        }
+
+        // ListNode* next = front -> next;
+
+        // temp  -> next =  prev ;
 
 
-        pair<ListNode* , ListNode*>  ret  = help(temp -> next );
-
-        temp -> next = NULL;
-        ret.second -> next = temp;
-
-        return {ret.first , temp};
+        return help( front , temp );
+        
     }
 public:
     ListNode* reverseList(ListNode* head) {
@@ -28,9 +34,10 @@ public:
 
         if( head == NULL ) return NULL;
         
-        pair<ListNode * , ListNode* >  temp1 = help( head );
+        ListNode*  temp = help( head , NULL );
 
-        ListNode*  temp = temp1.first; 
+        // head -> next = NULL;
+        
         
         return temp;
     }
