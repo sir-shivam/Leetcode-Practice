@@ -11,7 +11,7 @@ public:
         }
         
 
-        mpp[beginWord] = 1;
+        mpp[beginWord] = 1e9;
 
         if(!mpp.count(endWord)) return 0 ;
 
@@ -30,7 +30,7 @@ public:
 
             if( word == endWord) return d;
 
-            if( d <=  mpp[word]){
+            if( d <  mpp[word]){
                 mpp[word] = d ;
 
                 for(int i = 0 ; i < word.size() ; i++){
