@@ -1,57 +1,59 @@
-using pp = tuple<long long  , int > ;
+
+using pp = pair<long long , int>;
+
 class Solution {
+
+    int const MOD = 1e9 + 7 ;
 public:
     int countPaths(int n, vector<vector<int>>& roads) {
-
-        const int MOD = 1e9 + 7 ;
-
-        vector<vector<pair<int , int>>> adj( n );
-
-        for( auto & r : roads){
-            int u = r[0];
-            int v = r[1];
-            int w = r[2];
-
-            adj[u].push_back({v , w});
-            adj[v].push_back({u , w});
-        }
         
-        vector<pair<int , long long >> dist(n , { 0 , LLONG_MAX});
+        vector<vector<pair<int , long long >>> adj(n );
 
+        for(auto & rd : roads){
+            int u = rd[0];
+            int v = rd[1];
+
+            long long  w = rd[2];
+
+            adj[u].push_back({ v , w});
+
+            adj[v].push_back({ u , w});
+        }
 
         priority_queue<pp , vector<pp> , greater<pp>> pq;
 
+        vector<pair<long long , long long > > dis(n , {LLONG_MAX , 0 } );
 
 
+        pq.push({ 0 , 0 });
 
-        pq.push({ 0 , 0  });
-        dist[0].second = 0 ;
-        dist[0].first = 1;
+        dis[0].first = 0 ;
+        dis[0].second = 1;
 
-        while( !pq.empty()){
-            auto [ d , node  ] = pq.top();
+        while(!pq.empty()){
+            auto [ d , node] = pq.top();
 
             pq.pop();
-             if (d > dist[node].second)
-        continue;
 
-            for( auto & [a , w ] : adj[node]){
+            // if(d > dis[node].first ) continue;
 
-                if( (long long )w + d < dist[a].second){
-                    dist[a].second = w + d;
-                    dist[a].first = dist[node].first;
-                    pq.push({dist[a].second, a});
-                }else if((long long ) w + d == dist[a].second){
-                    dist[a].first = (dist[a].first +dist[node].first) %MOD;
-                    // dist[a].first %= MOD;
-                    // pq.push({ w + d , a });
+            for(auto & [a , w] : adj[node] ){
+                if(dis[a].first == d + w){
+                    dis[a].second = (dis[a].second + dis[node].second) % MOD;
+                }else if(d+ w < dis[a].first ){
+                    dis[a].first = d+w;
+                    dis[a].second =  dis[node].second;
+                    pq.push({d+w , a});
                 }
             }
         }
 
-        // cout << dist[n-1].second;
+        if(dis[n-1].first == LLONG_MAX ) return 0 ;
 
-        return dist[n-1].first;
 
+        return dis[n-1].second;
+        
+
+        
     }
 };
