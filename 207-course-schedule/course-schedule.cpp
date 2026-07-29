@@ -1,51 +1,53 @@
 class Solution {
-
-    bool help(int node , vector<vector<int>> & adj , vector<int> & vis , vector<int> & visDfs){
-
-        if(visDfs[node]) return false;
-
-        if (vis[node]) return true;
-
-        vis[node] = 1;
-        visDfs[node] = 1;
-
-        for(auto & a : adj[node]){
-            if(!help(a , adj , vis , visDfs)){
-                return false;
-            }
-        }
-        
-        visDfs[node] = 0 ;
-        return true;
-
-    }
 public:
-    bool canFinish(int num, vector<vector<int>>& pre) {
-        
-        // lets try dfs 
-        vector<int> vis( num , 0 );
-        vector<int> visDfs( num , 0 );
+    bool canFinish(int n, vector<vector<int>>& pre) {
+        // trying topo sort 
 
-        vector<vector<int>> adj( num );
+        vector<vector<int>> adj(n);
 
-        for(auto & ed : pre){
-            int u = ed[0];
-            int v = ed[1];
+        vector<int> inDeg( n , 0 );
+
+        for( auto & p : pre){
+            int u = p[0];
+            int v = p[1];
 
             adj[u].push_back(v);
+
+            inDeg[v] ++;
         }
 
-        for( int i = 0 ; i < num ; i++){
-            if(vis[i] == 0 ){
-                if(!help( i , adj , vis , visDfs)){
-                    return false; 
+        queue<int> q;
+
+        for(int i = 0 ; i < n ; i++){
+            if( inDeg[i] == 0 ){
+                q.push(i);
+            }
+        }
+
+
+        vector<int> topo;
+
+        int cnt = 0 ;
+        while(!q.empty()){
+            auto node = q.front();
+
+            q.pop();
+
+            cnt ++;
+
+            topo.push_back(node);
+
+            for(auto & a : adj[node]){
+                inDeg[a] --;
+                if(inDeg[a] == 0 ){
+                    q.push(a);
                 }
             }
         }
 
-        return true;
 
-        
+        return cnt == n ;
+
         
     }
 };
