@@ -8,19 +8,13 @@ class Solution {
 
         if( turn){
 
-            bool take1 = help( i+1 , j , 0 , score - nums[i] , nums);
-
-            bool take2 = help( i , j-1 , 0 , score - nums[j] , nums);
-
-            return take1 && take2;
+            return  help( i+1 , j , 0 , score - nums[i] , nums) &&
+            help( i , j-1 , 0 , score - nums[j] , nums);
 
          }else{
 
-            bool take1 = help( i +1 , j , 1 , score + nums[i] , nums );
-
-            bool take2 = help( i , j - 1 , 1 , score + nums[j] , nums);
-
-            return take1 || take2 ;
+            return help( i +1 , j , 1 , score + nums[i] , nums ) || 
+            help( i , j - 1 , 1 , score + nums[j] , nums) ;
 
         }
 
