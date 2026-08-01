@@ -1,14 +1,53 @@
-class Solution {
 
-        
+class FenWick{
 
-        long long help( long long  mid ,vector<int>& monsters , vector<long long > &  mpp ){
+    public:
+
+    vector<long long> bit;
+    int n ;
+    FenWick( int n ){
+        this -> n = n ;
+        bit.resize(n+1 , 0 );
+    }
+
+    void add( int idx , long long val ){
+        idx ++;
+        while(idx <= n  ){
+            bit[idx] += val;
+            idx += ( idx & ( -idx));
+        }
+    }
+
+    long long sum( int idx){
+        idx++;
+
+        long long ans = 0 ;
+        while( idx > 0   ){
+            ans += bit[idx];
+            idx -= ( idx & ( - idx));
+        }
+        return ans;
+    }
+
+
+    void addRange(int l , int r , long long val){
+        add(l , val);
+        if( r +1 < n ){
+            add(r+1 , -val);
+        }
+    }
+
+};
+
+class Solution {    
+
+        long long help( long long  mid ,vector<int>& monsters , FenWick & ft ){
             int n = monsters.size();
 
             long long st  = mid ;
             
             for( int i = 0 ; i < n ; i++){
-                if(st  + mpp[i] >= monsters[i]){
+                if(st  + ft.sum(i) >= monsters[i]){
                     st -= monsters[i];
                     st = st < 0 ? 0 : st ;
                 }else{
@@ -30,17 +69,14 @@ public:
 
         vector<long long > diff( n , 0 );
 
+        FenWick ft( n );
 
         for(auto & ed : boosts){
             int a = ed[0];
             int b = ed[1];
             int c = ed[2];
 
-            diff[a] +=  c;
-
-            if( b +1 < n ){
-                diff[b+1] -= c;
-            }
+            ft.addRange( a , b , c );
         }
 
 
@@ -56,12 +92,12 @@ public:
         long long left = 0;
         long long right = accumulate(monsters.begin() , monsters.end() , 1LL * 0 ) ;
 
-        long long ans  = 1e9 ;
+        long long ans  = right ;
 
         while( left <= right){
             long long mid = (left + ( right - left )/ 2);
 
-            if( help( mid , monsters , bonus)){
+            if( help( mid , monsters , ft)){
                 ans = mid ;
                 right  = mid -1 ;
             }else{
