@@ -10,12 +10,8 @@ class Solution {
 
             ans +=  help( a , node   , dist +1 , adj , child);
             // child[node] += child[a];
-            
-        }
+            child[node] += child[a];
 
-        if( par != -1){
-
-        child[par] += child[node];
         }
 
         return dist +  ans;
