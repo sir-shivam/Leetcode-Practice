@@ -29,8 +29,6 @@ class DisJointSet{
     }
 
     bool add(int a , int b , int w ){
-        find(a);
-        find( b);
         int t = ( sum[a] ^ sum[b]);
         return (t ^ w ) == 0 ;
     }
