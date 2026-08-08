@@ -1,60 +1,54 @@
 class Solution {
 
     int N ;
-    int help( int node , int par  , int dist ,  vector<vector<int> > &  adj  , vector<int> & child){
+    int help( int node , int par , int d  ,  vector<vector<int>> & adj , vector<int>  & child ){
 
-        int ans = 0 ;
-
-        for( auto & a: adj[node]){
-            if(a == par) continue;
-
-            ans +=  help( a , node   , dist +1 , adj , child);
-            // child[node] += child[a];
+        
+        int res = d  ;
+        for( auto & a :  adj[node]){
+            if( a == par ) continue;
+            res += help( a , node , d+1 , adj , child);
             child[node] += child[a];
-
         }
 
-        return dist +  ans;
+        return res ;
+    }   
 
-    }
+    void dfs( int node , int par ,vector<int> & child,  vector<vector<int>> & adj , vector<int> & ans ){
 
-    void dfs( int node , int par , vector<int> & ans , vector<int> & child , vector<vector<int> > &  adj ){
-
-        for(auto & a: adj[node]){
+        for( int & a : adj[node]){
             if( a == par ) continue;
-
+            
             ans[a] = ans[node] - child[a] + ( N - child[a]);
 
-            dfs( a , node , ans , child , adj);
-
+            dfs( a , node , child, adj , ans);
+            
         }
-
     }
+
+
 public:
     vector<int> sumOfDistancesInTree(int n, vector<vector<int>>& edges) {
+        // wow  lets solve it again 
+
         N = n ;
-        vector<vector<int> > adj( n );
+        vector<vector<int>>  adj( n );
 
         for( auto & ed : edges){
             int u = ed[0];
             int v = ed[1];
 
-            adj[u].push_back(v);
-
+            adj[u].push_back(v );
             adj[v].push_back(u );
         }
 
-        vector<int> ans( n , 0 );
+        vector<int> dis( n ) , ans(n , -1) , child( n , 1);
 
-        vector<int> child( n , 1 );
+        ans[0] = help( 0 , -1 , 0 , adj , child);
 
-        int t = help( 0 , -1 , 0 , adj , child);
-
-        ans[0] = t ;
-
-
-        dfs(0 , -1 , ans , child , adj );
-
+        dfs( 0 , -1 , child , adj , ans);
+        
         return ans;
+
     }
 };
