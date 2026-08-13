@@ -35,7 +35,6 @@ public:
 
             pq.pop();
 
-            // if(d > dis[node].first ) continue;
 
             for(auto & [a , w] : adj[node] ){
                 if(dis[a].first == d + w){
